@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic M75B — Noise-Cancelling Wireless Headphones</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== HEADER / NAVBAR ===== -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <!-- Logo -->
+      <a href="#" class="header__logo" aria-label="Dynamic Home">
+        <span class="logo-mark">D</span>
+        <span class="logo-text">DYNAMIC</span>
+      </a>
+
+      <!-- Nav Links -->
+      <nav class="header__nav" aria-label="Main navigation">
+        <a href="#" class="nav-link">Headphones</a>
+        <a href="#" class="nav-link">Earphones</a>
+        <a href="#" class="nav-link">Accessories</a>
+        <a href="#" class="nav-link">About</a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header__actions">
+        <!-- Search -->
+        <button class="icon-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+
+        <!-- Currency -->
+        <div class="currency-selector" role="combobox" aria-label="Select currency">
+          <button class="currency-btn" id="currencyBtn" aria-haspopup="listbox" aria-expanded="false">
+            <span id="currencyLabel">IDR</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="currency-dropdown" id="currencyDropdown" role="listbox" aria-label="Currency options">
+            <li role="option" data-currency="IDR" data-symbol="Rp" data-rate="1" aria-selected="true">IDR — Rupiah</li>
+            <li role="option" data-currency="USD" data-symbol="$" data-rate="0.000063" aria-selected="false">USD — Dollar</li>
+            <li role="option" data-currency="SGD" data-symbol="S$" data-rate="0.000085" aria-selected="false">SGD — Singapore Dollar</li>
+          </ul>
+        </div>
+
+        <!-- Cart -->
+        <button class="icon-btn cart-btn" id="cartToggle" aria-label="Shopping cart" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
+        </button>
+
+        <!-- Hamburger -->
+        <button class="icon-btn hamburger" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar" id="searchBar" aria-hidden="true">
+      <div class="search-bar__inner">
+        <input type="search" placeholder="Search products…" aria-label="Search products" id="searchInput" />
+        <button class="icon-btn" id="searchClose" aria-label="Close search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav class="mobile-nav" id="mobileNav" aria-hidden="true" aria-label="Mobile navigation">
+      <a href="#" class="mobile-nav__link">Headphones</a>
+      <a href="#" class="mobile-nav__link">Earphones</a>
+      <a href="#" class="mobile-nav__link">Accessories</a>
+      <a href="#" class="mobile-nav__link">About</a>
+    </nav>
+  </header>
+
+  <!-- ===== CART DRAWER ===== -->
+  <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-drawer__header">
+      <h2>Cart</h2>
+      <button class="icon-btn" id="cartClose" aria-label="Close cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="cart-drawer__body" id="cartBody">
+      <div class="cart-empty" id="cartEmpty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <p>Your cart is empty</p>
+      </div>
+      <ul class="cart-items" id="cartItems" aria-label="Cart items"></ul>
+    </div>
+    <div class="cart-drawer__footer" id="cartFooter">
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">Rp0</span>
+      </div>
+      <button class="btn btn--primary btn--full">Checkout</button>
+    </div>
+  </aside>
+
+  <main id="main-content">
+
+    <!-- ===== BREADCRUMB ===== -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Headphones</a></li>
+          <li aria-current="page">Dynamic M75B</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ===== PRODUCT SECTION ===== -->
+    <section class="product-section" aria-label="Product detail">
+      <div class="container">
+        <div class="product-layout">
+
+          <!-- ===== GALLERY ===== -->
+          <div class="product-gallery" aria-label="Product images">
+            <!-- Thumbnails -->
+            <div class="gallery-thumbs" role="tablist" aria-label="Product image thumbnails">
+              <button class="thumb active" role="tab" aria-selected="true" aria-label="View image 1" data-index="0">
+                <img src="images/black-4.png" alt="Dynamic M75B Black - angle view thumbnail" loading="lazy" />
+              </button>
+              <button class="thumb" role="tab" aria-selected="false" aria-label="View image 2" data-index="1">
+                <img src="images/black-3.png" alt="Dynamic M75B Black - front view thumbnail" loading="lazy" />
+              </button>
+              <button class="thumb" role="tab" aria-selected="false" aria-label="View image 3" data-index="2">
+                <img src="images/black-2.png" alt="Dynamic M75B Black - side view thumbnail" loading="lazy" />
+              </button>
+              <button class="thumb" role="tab" aria-selected="false" aria-label="View image 4" data-index="3">
+                <img src="images/black-1.png" alt="Dynamic M75B Black - detail view thumbnail" loading="lazy" />
+              </button>
+            </div>
+
+            <!-- Main Image -->
+            <div class="gallery-main">
+              <button class="gallery-nav gallery-nav--prev" id="galleryPrev" aria-label="Previous image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+
+              <div class="gallery-main__track" id="galleryTrack" aria-live="polite">
+                <!-- Black images -->
+                <div class="gallery-slide active" data-color="black" data-index="0">
+                  <img src="images/black-4.png"
+                    alt="Dynamic M75B Black - angle view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide" data-color="black" data-index="1">
+                  <img src="images/black-3.png"
+                    alt="Dynamic M75B Black - front view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide" data-color="black" data-index="2">
+                  <img src="images/black-2.png"
+                    alt="Dynamic M75B Black - side view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide" data-color="black" data-index="3">
+                  <img src="images/black-1.png"
+                    alt="Dynamic M75B Black - detail view"
+                    class="gallery-img" />
+                </div>
+                <!-- Silver images -->
+                <div class="gallery-slide hidden" data-color="silver" data-index="0">
+                  <img src="images/silver-4.png"
+                    alt="Dynamic M75B Silver - angle view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide hidden" data-color="silver" data-index="1">
+                  <img src="images/silver-3.png"
+                    alt="Dynamic M75B Silver - front view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide hidden" data-color="silver" data-index="2">
+                  <img src="images/silver-2.png"
+                    alt="Dynamic M75B Silver - side view"
+                    class="gallery-img" />
+                </div>
+                <div class="gallery-slide hidden" data-color="silver" data-index="3">
+                  <img src="images/silver-1.png"
+                    alt="Dynamic M75B Silver - detail view"
+                    class="gallery-img" />
+                </div>
+              </div>
+
+              <button class="gallery-nav gallery-nav--next" id="galleryNext" aria-label="Next image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+
+              <!-- Dot Indicators -->
+              <div class="gallery-dots" role="tablist" aria-label="Image indicators" id="galleryDots"></div>
+            </div>
+          </div>
+
+          <!-- ===== PRODUCT INFO ===== -->
+          <div class="product-info">
+            <!-- Category & Name -->
+            <p class="product-category">Noise-Cancelling Wireless Headphones</p>
+            <h1 class="product-name">Dynamic M75B</h1>
+
+            <!-- Price -->
+            <div class="product-price-block">
+              <span class="product-price" id="productPrice">Rp1.499.000</span>
+              <span class="product-stock" id="stockBadge" aria-live="polite">
+                <span class="stock-dot"></span>
+                <span id="stockText">In Stock</span>
+              </span>
+            </div>
+
+            <!-- Highlights -->
+            <ul class="product-highlights" aria-label="Key features">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Adaptive Active Noise Cancellation
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                40mm Beryllium Drivers
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Up to 32 Hours Battery Life
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Bluetooth 5.1 — 30m Range
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                4 Microphone Talk & ANC Solution
+              </li>
+            </ul>
+
+            <!-- Color Variant -->
+            <fieldset class="variant-group">
+              <legend class="variant-label">
+                Color: <span id="selectedColorName">Black</span>
+              </legend>
+              <div class="variant-swatches" role="radiogroup" aria-label="Select color">
+                <label class="swatch-label" title="Black">
+                  <input type="radio" name="color" value="black" checked aria-label="Black" />
+                  <span class="swatch swatch--black" aria-hidden="true"></span>
+                  <span class="swatch-name">Black</span>
+                </label>
+                <label class="swatch-label swatch-label--soldout" title="Silver — Sold Out">
+                  <input type="radio" name="color" value="silver" aria-label="Silver — Sold Out" />
+                  <span class="swatch swatch--silver" aria-hidden="true"></span>
+                  <span class="swatch-name">Silver</span>
+                  <span class="swatch-soldout">Sold Out</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Quantity -->
+            <div class="quantity-group">
+              <label class="variant-label" for="qtyInput">Quantity</label>
+              <div class="quantity-control" role="group" aria-label="Quantity control">
+                <button class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                <input type="number" id="qtyInput" class="qty-input" value="1" min="1" max="1" readonly aria-label="Quantity" />
+                <button class="qty-btn" id="qtyPlus" aria-label="Increase quantity">+</button>
+              </div>
+              <p class="stock-info" id="stockInfo">1 item tersedia</p>
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="product-actions">
+              <button class="btn btn--primary btn--full" id="addToCartBtn" aria-label="Add Dynamic M75B Black to cart">
+                Add to Cart
+              </button>
+            </div>
+
+            <!-- Toast notification -->
+            <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+            <!-- Shipping Info -->
+            <ul class="shipping-info" aria-label="Shipping information">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                Free shipping on orders above Rp500.000
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                30-day returns
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                2-year warranty
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUCT DESCRIPTION ===== -->
+    <section class="section section--alt" aria-labelledby="desc-heading">
+      <div class="container container--narrow">
+        <h2 class="section-title" id="desc-heading">About the Dynamic M75B</h2>
+        <div class="description-body">
+          <p>
+            The Dynamic M75B Active Noise-Cancelling Wireless Headphones deliver detailed, serious acoustics and
+            custom-tailored sound with 40mm Beryllium drivers and Adaptive Active Noise Cancellation for the
+            perfect combination of sound and silence.
+          </p>
+          <p>
+            Experience effortless all-day listening with lightweight anodized aluminum and soft lambskin leather
+            in a distinct, refined silhouette — built for professionals who demand both performance and elegance.
+          </p>
+          <p>
+            Featuring TUMI's iconic design language, the M75B is a seamless blend of engineering precision and
+            artistic expression, designed to enhance every journey whether in the office, the cabin, or the city.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURES GRID ===== -->
+    <section class="section" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 class="section-title" id="features-heading">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <h3>Adaptive ANC</h3>
+            <p>Three ANC modes — Adaptive, MAX, and All Day — let you tune out the world on your terms.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>40mm Beryllium Drivers</h3>
+            <p>Proprietary beryllium-coated drivers deliver expansive, detailed sound with exceptional clarity.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            </div>
+            <h3>32-Hour Battery</h3>
+            <p>Up to 32 hours of playtime. Up to 28 hours with ANC enabled, so your music lasts as long as you do.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.05 12A11 11 0 1112 22.95"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3>Bluetooth 5.1</h3>
+            <p>Stable 30m wireless range with AAC, aptX™ Adaptive up to 24-bit/48kHz, and SBC codec support.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Premium Materials</h3>
+            <p>Lambskin leather headband and ear pads with anodized aluminum controls for lasting comfort.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
+            </div>
+            <h3>4 Microphone Array</h3>
+            <p>Four-microphone talk and ANC solution with wind protection for crystal-clear calls anywhere.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TECH SPECS ===== -->
+    <section class="section section--alt" aria-labelledby="specs-heading">
+      <div class="container container--narrow">
+        <h2 class="section-title" id="specs-heading">Technical Specifications</h2>
+
+        <div class="specs-tabs" role="tablist" aria-label="Specification categories">
+          <button class="specs-tab active" role="tab" aria-selected="true" aria-controls="specs-design" id="tab-design">Materials & Design</button>
+          <button class="specs-tab" role="tab" aria-selected="false" aria-controls="specs-sound" id="tab-sound">Sound & Features</button>
+          <button class="specs-tab" role="tab" aria-selected="false" aria-controls="specs-connect" id="tab-connect">Connectivity</button>
+        </div>
+
+        <div class="specs-panels">
+          <!-- Panel 1 -->
+          <div class="specs-panel active" role="tabpanel" id="specs-design" aria-labelledby="tab-design">
+            <dl class="specs-list">
+              <div class="specs-row"><dt>Materials</dt><dd>Lambskin leather headband & ear pads / Anodized aluminum controls</dd></div>
+              <div class="specs-row"><dt>Dimensions</dt><dd>160.75mm × 197.83mm × 83.57mm</dd></div>
+              <div class="specs-row"><dt>Weight</dt><dd>338g</dd></div>
+              <div class="specs-row"><dt>Ear Coupling</dt><dd>Over-Ear</dd></div>
+              <div class="specs-row"><dt>Ear Pads</dt><dd>Replaceable magnetic lambskin-wrapped memory foam</dd></div>
+            </dl>
+          </div>
+          <!-- Panel 2 -->
+          <div class="specs-panel" role="tabpanel" id="specs-sound" aria-labelledby="tab-sound" hidden>
+            <dl class="specs-list">
+              <div class="specs-row"><dt>Drivers</dt><dd>40mm Beryllium</dd></div>
+              <div class="specs-row"><dt>Impedance</dt><dd>32 Ohms</dd></div>
+              <div class="specs-row"><dt>Talk Microphones</dt><dd>4 microphone talk solution with wind protection</dd></div>
+              <div class="specs-row"><dt>ANC Microphones</dt><dd>4 microphone ANC solution</dd></div>
+              <div class="specs-row"><dt>Voice Assistant</dt><dd>Compatible with native voice assistants</dd></div>
+            </dl>
+          </div>
+          <!-- Panel 3 -->
+          <div class="specs-panel" role="tabpanel" id="specs-connect" aria-labelledby="tab-connect" hidden>
+            <dl class="specs-list">
+              <div class="specs-row"><dt>Battery Life</dt><dd>Up to 32 hrs / 28 hrs with ANC</dd></div>
+              <div class="specs-row"><dt>Bluetooth</dt><dd>BT 5.1 — 100ft/30m, AAC, aptX™ Adaptive 24bit/48kHz, SBC</dd></div>
+              <div class="specs-row"><dt>Wired Digital</dt><dd>Hi-res up to 24-bit/96kHz via USB-C to USB-C cable</dd></div>
+              <div class="specs-row"><dt>Analog</dt><dd>USB-C to 3.5mm cable for analog audio</dd></div>
+              <div class="specs-row"><dt>Antenna</dt><dd>Internal</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHAT'S IN THE BOX ===== -->
+    <section class="section" aria-labelledby="inbox-heading">
+      <div class="container container--narrow">
+        <h2 class="section-title" id="inbox-heading">What's in the Box</h2>
+        <ul class="inbox-list" aria-label="Box contents">
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+            <span>Wireless Headphones</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>USB-C to USB-C Charging Cable</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>USB-C to 3.5mm Audio Cable</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>USB-C to USB-A Adapter</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>3.5mm to ¼" Adapter</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>Flight Adapter</span>
+          </li>
+          <li class="inbox-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 9V7H2v5l4 1v6l6 1 6-1v-6l4-1V9z"/></svg>
+            <span>Hard Shell Travel Case</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== SUPPORT ===== -->
+    <section class="section section--alt" aria-labelledby="support-heading">
+      <div class="container container--narrow">
+        <h2 class="section-title" id="support-heading">Product Support</h2>
+        <div class="support-grid">
+          <a href="#" class="support-card" aria-label="Visit Support Center">
+            <div class="support-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div>
+              <h3>Support Center</h3>
+              <p>Access setup guides, troubleshooting tips, and product manuals.</p>
+            </div>
+            <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <a href="#" class="support-card" aria-label="Visit FAQ">
+            <div class="support-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <h3>FAQ</h3>
+              <p>Find answers to the most frequently asked questions about the M75B.</p>
+            </div>
+            <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="#" class="header__logo footer__logo" aria-label="Dynamic Home">
+            <span class="logo-mark">D</span>
+            <span class="logo-text">DYNAMIC</span>
+          </a>
+          <p>Sound tools for the discerning professional. Precision-crafted for every journey.</p>
+        </div>
+        <nav class="footer__nav" aria-label="Products">
+          <h4>Products</h4>
+          <a href="#">Headphones</a>
+          <a href="#">Earphones</a>
+          <a href="#">Accessories</a>
+        </nav>
+        <nav class="footer__nav" aria-label="Company">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Press</a>
+          <a href="#">Careers</a>
+        </nav>
+        <nav class="footer__nav" aria-label="Support links">
+          <h4>Support</h4>
+          <a href="#">Support Center</a>
+          <a href="#">FAQ</a>
+          <a href="#">Returns & Shipping</a>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 Dynamic. All rights reserved.</p>
+        <div class="footer__legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
